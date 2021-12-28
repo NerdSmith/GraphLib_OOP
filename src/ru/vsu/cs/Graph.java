@@ -2,8 +2,12 @@ package ru.vsu.cs;
 
 import ru.vsu.cs.edge.Edge;
 
+import java.util.Set;
+
 public interface Graph<V> {
     int vertexCount();
+
+    Set<V> vertices();
 
     int edgeCount();
 

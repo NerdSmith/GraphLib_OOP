@@ -2,12 +2,15 @@ package ru.vsu.cs;
 
 import ru.vsu.cs.edge.Edge;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public abstract class AbstractBaseGraph<V> implements Graph<V> {
     protected Map<V, Map<V, Edge<V>>> matrix;
     protected int edgeCount = 0;
+
+    public AbstractBaseGraph() {
+        this.matrix = new HashMap<>();
+    }
 
     @Override
     public int vertexCount() {
@@ -31,11 +34,12 @@ public abstract class AbstractBaseGraph<V> implements Graph<V> {
     protected void addEdgeFromTo(V vertex1, V vertex2, Edge<V> edge) {
         Map<V, Edge<V>> row = matrix.get(vertex1);
 
-        if (row != null) {
-            row.put(vertex2, edge);
+//        matrix.computeIfAbsent(vertex1, newV -> new HashMap<>()).put(vertex2, edge);
+        if (row == null) {
+            matrix.put(vertex1, new HashMap<>(Map.of(vertex2, edge)));
         }
         else {
-            matrix.put(vertex1, new HashMap<>(Map.of(vertex2, edge)));
+            row.put(vertex2, edge);
         }
     }
 
@@ -51,12 +55,13 @@ public abstract class AbstractBaseGraph<V> implements Graph<V> {
 
     protected boolean removeEdgeFromTo(V vertex1, V vertex2) {
         Map<V, Edge<V>> row = matrix.get(vertex1);
-        if (row != null) {
-            row.put(vertex2, null);
-            return true;
+        if (row == null) {
+            return false;
         }
         else {
-            return false;
+            row.put(vertex2, null);
+            return true;
+
         }
     }
 
@@ -71,8 +76,38 @@ public abstract class AbstractBaseGraph<V> implements Graph<V> {
     }
 
     @Override
-    public Iterable<V> adjacencies(V o) {
-        throw new UnsupportedOperationException();
+    public Set<V> vertices() {
+        return matrix.keySet();
     }
 
+    @Override
+    public Iterable<V> adjacencies(V v) {
+        Map<V, Edge<V>> adj = matrix.get(v);
+        if (adj == null) {
+            return new HashSet<>();
+        }
+        Set<V> currAdjV = new HashSet<>();
+        for (V vertex: adj.keySet()) {
+            if (adj.get(vertex) != null) {
+                currAdjV.add(vertex);
+            }
+        }
+        return currAdjV;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (V vertex: matrix.keySet()) {
+            sb.append(
+                    String.format("%s connected to ", vertex)
+            );
+            for (V connectedVertex: matrix.get(vertex).keySet()) {
+                if (matrix.get(vertex).get(connectedVertex) != null)
+                    sb.append(String.format("%s ", connectedVertex));
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
 }

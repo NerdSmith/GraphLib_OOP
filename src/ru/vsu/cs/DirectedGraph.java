@@ -1,4 +1,4 @@
 package ru.vsu.cs;
 
-public class DirectedGraph {
+public interface DirectedGraph<V> extends Graph<V> {
 }
