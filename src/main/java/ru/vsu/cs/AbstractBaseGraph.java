@@ -19,7 +19,7 @@ public abstract class AbstractBaseGraph<V> implements Graph<V> {
 
     @Override
     public int edgeCount() {
-        throw new UnsupportedOperationException();
+        return edgeCount;
     }
 
     @Override

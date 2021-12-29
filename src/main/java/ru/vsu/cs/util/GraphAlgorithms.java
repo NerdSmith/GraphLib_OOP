@@ -14,9 +14,13 @@ public class GraphAlgorithms {
 
         for (V currV: graph.vertices()) {
             depthFirstSearch(graph, currV, visited::add);
+            if (visited.size() != vertices) {
+                return false;
+            }
+            visited.clear();
         }
 
-        return visited.size() == vertices;
+        return true;
     }
 
     public static <V> void depthFirstSearch(Graph<V> graph, V from, Consumer<V> visitor) {

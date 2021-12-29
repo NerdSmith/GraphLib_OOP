@@ -26,10 +26,17 @@ public class Main {
 //
 //        System.out.println(graph.adjacencies("Google"));
 
-        Graph<Integer> graph = new WeightedDirectedRandomGraph().getRndIntGraph(10);
+//        Graph<Integer> graph = new WeightedDirectedRandomGraph().getRndIntGraph(10);
+//
+//
+//        System.out.println(graph);
 
-
-        System.out.println(graph);
+        Graph<Integer> graphInt = new UndirectedGraph<>();
+        graphInt.addEdge(0, 1);
+        graphInt.addEdge(1, 2);
+        graphInt.addEdge(2, 0);
+        graphInt.removeEdge(0, 1);
+        System.out.println(graphInt.adjacencies(0));
 
 //        System.out.println(graph.edgeCount());
 //        graph.removeEdge(3, 4);
